@@ -1,0 +1,38 @@
+# requirements.txt — EDGAR Multi-Agent Comparator
+# Compatible with uv (uv add / uv sync) and pip.
+#
+# Install all deps:
+#   uv sync        (uses pyproject.toml + this file)
+#   uv pip install -r requirements.txt
+#
+# Or with pip:
+#   pip install -r requirements.txt
+
+# ── Azure AI ──────────────────────────────────────────────────────────────────
+azure-ai-projects>=2.1.0         # Foundry Agent SDK — agents, inference, connections
+azure-identity>=1.25.0           # AzureCliCredential, DefaultAzureCredential
+azure-search-documents>=11.6.0   # AI Search — index creation, HNSW/KNN, vector search
+azure-cosmos>=4.7.0              # Cosmos DB — evaluation result store
+azure-storage-blob>=12.19.0      # Blob Storage — raw EDGAR filing archive
+
+# ── Data / EDGAR ──────────────────────────────────────────────────────────────
+sec-edgar-downloader>=5.1.0      # Pull 10-K / 10-Q from SEC EDGAR
+pypdf>=6.0.0                     # PDF extraction fallback
+beautifulsoup4>=4.12.0           # HTML stripping for EDGAR HTML filings
+lxml>=5.0.0                      # Fast HTML parser backend for BeautifulSoup
+
+# ── Web App ───────────────────────────────────────────────────────────────────
+streamlit>=1.35.0                # Interactive UI (tabs, charts, chat)
+plotly>=5.20.0                   # Bar charts, radar charts in Streamlit
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0             # Load .env into os.environ
+tqdm>=4.66.0                     # Progress bars for embedding loop
+tenacity>=8.2.0                  # Retry decorator for API calls
+
+# ── Observability (optional) ──────────────────────────────────────────────────
+azure-monitor-opentelemetry>=1.8.0  # App Insights tracing for agent runs
+
+# ── Dev tools ─────────────────────────────────────────────────────────────────
+black>=24.0.0
+ruff>=0.4.0

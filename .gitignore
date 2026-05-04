@@ -1,3 +1,4 @@
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -216,3 +217,46 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Secrets
+.env
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+azure-ai/
+*.egg-info/
+dist/
+build/
+
+# Data (potentially large + PII)
+data/sec-edgar-filings/
+data/*.json
+data/*.csv
+
+# Evaluation outputs (regenerate with run_evals.py)
+evaluation/results.json
+evaluation/index_benchmark.csv
+
+# Streamlit cache
+.streamlit/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Bicep compiled ARM templates
+*.json
+!pyproject.toml
+
+# macOS
+.DS_Store
+
+# uv
+uv.lock
+
