@@ -1,6 +1,6 @@
 # EDGAR Multi-Agent Comparator
 
-**Production-grade Agentic RAG on Azure AI Foundry** — compare 10-K and 10-Q filings for MSFT, AAPL, GOOGL, and NVDA using multi-agent orchestration, advanced vector search, and a live evaluation dashboard.
+**Agentic AI Rag Comparator and Evaluator** — compare 10-K and 10-Q filings for MSFT, AAPL, GOOGL, and NVDA using multi-agent orchestration, advanced vector search, and a live evaluation dashboard.
 
 ---
 
@@ -109,7 +109,7 @@ curl -Lsf https://astral.sh/uv/install.sh | sh
 
 ```bash
 # 1. Enter project directory
-cd /home/ani/sandbox/azure_ai
+cd /path/
 
 # 2. One-shot setup (installs deps, validates .env, optionally deploys Bicep)
 chmod +x setup.sh && ./setup.sh
@@ -141,56 +141,3 @@ uv run python -m agents.setup_agents \
 ```
 
 ---
-
-## What You'll Learn
-
-### Azure AI Foundry
-- How `AIProjectClient` connects to your Foundry project and resolves connections
-- Creating agents with `AzureAISearchTool` and ticker-scoped personas
-- Thread-based agent execution: `create_thread → create_message → create_and_process_run`
-- Getting an Azure OpenAI client from the project (no separate API key needed)
-
-### Advanced RAG Patterns
-- **Query routing** — LLM decides which agents are relevant before running them
-- **Parallel agent execution** — `ThreadPoolExecutor` for concurrent I/O-bound agent runs
-- **Metadata filtering** — OData `$filter=ticker eq 'MSFT'` for ticker-scoped retrieval
-- **Hybrid search** — dense vectors (HNSW) + sparse keyword (BM25) fused via RRF
-- **Chunking strategy** — sliding window with overlap to preserve boundary context
-
-### Vector Search Deep Dive
-- HNSW graph construction and why `m` matters at index time vs query time
-- How `efSearch` trades recall for latency without rebuilding the index
-- Scalar quantization: converting float32 → int8 with minimal recall loss
-- Measuring recall@k using Exhaustive KNN as ground truth
-
-### RAG Evaluation
-- **Context Relevance** — are retrieved chunks relevant to the query?
-- **Faithfulness** — is the answer grounded in the context (anti-hallucination)?
-- **Answer Relevance** — does the answer actually address the question?
-- **LLM-as-judge** — GPT-4o scoring with structured rubrics (G-Eval style)
-
----
-
-## Resume Bullets
-
-> Built a multi-agent RAG system on **Azure AI Foundry** (Python SDK) with parallel agent orchestration across 4 company-specific financial analysts backed by SEC EDGAR 10-K/10-Q data, reducing query latency by running agents concurrently via `ThreadPoolExecutor`.
-
-> Designed and benchmarked 6 **Azure AI Search** vector index configs (HNSW Fast/Balanced/Accurate, Exhaustive KNN, Hybrid BM25+Vector, Scalar Quantized) with automated recall@k measurement — exposing the latency/recall tradeoff in a live Streamlit explorer.
-
-> Implemented the **RAG Triad** evaluation pipeline (Context Relevance, Faithfulness, Answer Relevance) using LLM-as-judge scoring with a Streamlit dashboard backed by Azure Cosmos DB.
-
-> Deployed supplemental infrastructure (**Cosmos DB NoSQL**, **Blob Storage**) via idempotent **Bicep** templates into an existing resource group; managed dependencies with `uv`.
-
----
-
-## Troubleshooting
-
-| Error | Fix |
-|-------|-----|
-| `FOUNDRY_PROJECT_ENDPOINT missing` | Check `.env` — must be the `/api/projects/<name>` URL |
-| `No AI Search connection found` | Add a Search connection in Foundry portal → Connections |
-| `Embedding model not found` | Verify `EMBEDDING_MODEL` matches your OpenAI deployment name exactly |
-| `EDGAR download 0 files` | SEC EDGAR rate-limits; wait a minute and retry |
-| `ConnectedAgentTool not available` | Expected — project uses application-layer orchestration (see agents/setup_agents.py) |
-| `Index already exists` | Safe — all index ops use `create_or_update_index` (idempotent) |
-| `ScalarQuantizationCompression error` | Requires azure-search-documents ≥ 11.5.0 — run `uv sync` |
